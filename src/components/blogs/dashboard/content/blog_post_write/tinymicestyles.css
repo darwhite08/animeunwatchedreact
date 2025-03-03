@@ -1,0 +1,18 @@
+/* custom-editor-styles.css */
+body {
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    color: #e9e6e6;
+    background-color: #000000;
+}
+p {
+    line-height: 1.6;
+}
+h1, h2, h3 {
+    color: #0044cc;
+}
+blockquote {
+    border-left: 4px solid #0044cc;
+    padding-left: 10px;
+    font-style: italic;
+}

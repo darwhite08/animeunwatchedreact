@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useState } from "react";
 
 const BlogHeadingInput = () => {
@@ -21,6 +22,13 @@ const BlogHeadingInput = () => {
 
     const removeTag = (tag) => {
         setSelectedTags(selectedTags.filter(t => t !== tag));
+    };
+    const saveHeadingTags = async() => {
+       try {
+        const req = await axios.post('/api/blog/heading/save',{heading,selectedTags});
+    } catch (error) {
+        
+       }
     };
 
     return (
@@ -51,6 +59,9 @@ const BlogHeadingInput = () => {
                         {tag}
                     </span>
                 ))}
+            </div>
+            <div className="text-end ">
+                <button onClick={saveHeadingTags} type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">save</button>
             </div>
         </div>
     );

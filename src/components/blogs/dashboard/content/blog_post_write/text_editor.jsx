@@ -1,24 +1,29 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef } from "react";
 
-export default function TinymceEditor() {
+export default function TinymceEditor({ value, onChange }) {
   const editorRef = useRef(null);
 
   useEffect(() => {
-    // Load TinyMCE script dynamically
-    const script = document.createElement('script');
-    script.src = '/tinymce_7.2.1/tinymce/js/tinymce/tinymce.min.js';
+    const script = document.createElement("script");
+    script.src = "/tinymce_7.2.1/tinymce/js/tinymce/tinymce.min.js";
     script.onload = () => {
       if (window.tinymce) {
         window.tinymce.init({
-          selector: '#editor',
-          branding: false,  // Removes "Powered by Tiny"
-          menubar: false,  // Hides the menubar
-          license_key: '', // Disables premium features (removes Upgrade button)
-          skin: 'oxide',  // Ensures standard free version skin
-          plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
-          toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
+          selector: "#editor",
+          branding: false, // Removes "Powered by Tiny"
+          menubar: false, // Hides the menubar
+          skin: "oxide", // Ensures standard free version skin
+          resize: false, // 🛑 Prevents editor resizing
+          height: 400, // 📌 Set a fixed height to prevent resizing issues
+          plugins:
+            "anchor preview emoticons table accordion autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount",
+          toolbar:
+            "undo redo | styles fontsize | bold italic underline strikethrough blockquote forecolor backcolor| numlist bullist indent outdent table emoticons| align lineheight | link image media  |  charmap  removeformat  accordion  preview",
           setup: (editor) => {
             editorRef.current = editor;
+            editor.on("input change keyup", () => {
+              onChange(editor.getContent()); // Update parent state
+            });
           },
         });
       }
@@ -26,13 +31,11 @@ export default function TinymceEditor() {
     document.body.appendChild(script);
 
     return () => {
-      // Cleanup when the component unmounts
       if (window.tinymce) {
-        window.tinymce.remove('#editor');
+        window.tinymce.remove("#editor");
       }
-      document.body.removeChild(script);
     };
-  }, []);
+  }, [onChange]);
 
-  return <textarea id="editor" defaultValue="Welcome to TinyMCE!" />;
+  return <textarea  id="editor" defaultValue={value} />;
 }

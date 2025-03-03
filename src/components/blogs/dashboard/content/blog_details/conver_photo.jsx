@@ -1,24 +1,29 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
-function BlogCoverPhotoUpload () {
+function BlogCoverPhotoUpload() {
   const [files, setFiles] = useState([]);
   const [uploadProgress, setUploadProgress] = useState({});
   const [uploaded, setUploaded] = useState(false);
 
+  // Alert when files change (previous useEffect issue)
+  useEffect(() => {
+    alert("workign")
+  }, [files]);
+
   const handleFileChange = (event) => {
     const selectedFiles = Array.from(event.target.files);
-    setFiles(selectedFiles);
-    uploadFiles(selectedFiles);
+    const newFiles = selectedFiles.filter(
+      (file) => !files.some((existingFile) => existingFile.name === file.name)
+    );
+    setFiles((prevFiles) => [...prevFiles, ...newFiles]);
+    uploadFiles(newFiles);
   };
 
   const uploadFiles = (files) => {
     files.forEach((file) => {
-      setUploadProgress((prev) => ({
-        ...prev,
-        [file.name]: 0,
-      }));
+      setUploadProgress((prev) => ({ ...prev, [file.name]: 0 }));
 
-      // Simulate file upload
       const interval = setInterval(() => {
         setUploadProgress((prev) => {
           const progress = prev[file.name] + 10;
@@ -33,7 +38,7 @@ function BlogCoverPhotoUpload () {
   };
 
   const removeFile = (fileName) => {
-    setFiles(files.filter((file) => file.name !== fileName));
+    setFiles((prevFiles) => prevFiles.filter((file) => file.name !== fileName));
     setUploadProgress((prev) => {
       const updatedProgress = { ...prev };
       delete updatedProgress[fileName];
@@ -45,6 +50,30 @@ function BlogCoverPhotoUpload () {
     setFiles([]);
     setUploadProgress({});
     setUploaded(false);
+  };
+
+  const saveCoverPhoto = async () => {
+    if (files.length === 0) {
+      alert("No files selected.");
+      return;
+    }
+
+    const formData = new FormData();
+    files.forEach((file) => formData.append("coverPhotos", file));
+
+    try {
+      const response = await axios.post("/api/blog/coverphoto/save", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      if (response.status === 200) {
+        alert("Cover photo uploaded successfully!");
+        destroyUpload();
+      }
+    } catch (error) {
+      console.error("Upload failed:", error);
+      alert("Failed to upload cover photo.");
+    }
   };
 
   const isImage = (file) => file.type.startsWith("image/");
@@ -103,6 +132,7 @@ function BlogCoverPhotoUpload () {
                         alt={file.name}
                         className="w-10 h-10 rounded-lg object-cover cursor-pointer"
                         onClick={() => window.open(fileURL, "_blank")}
+                        onLoad={() => URL.revokeObjectURL(fileURL)}
                       />
                     ) : (
                       "📄"
@@ -144,8 +174,17 @@ function BlogCoverPhotoUpload () {
           Destroy file upload
         </button>
       </div>
+      <div className="text-end">
+        <button
+          onClick={saveCoverPhoto}
+          type="button"
+          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2"
+        >
+          Save
+        </button>
+      </div>
     </div>
   );
-};
+}
 
 export default BlogCoverPhotoUpload;

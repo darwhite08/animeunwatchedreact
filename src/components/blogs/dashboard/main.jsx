@@ -1,5 +1,4 @@
 import React, { Suspense } from "react";
-import TinymiceEditor from "./content/blog_post_write/text_editor";
 import BlogSidebar from "./sidebar/blog_sidebar";
 import BlogPostSteps from "./content/stepper";
 import { Routes, Route } from 'react-router-dom';
@@ -8,6 +7,7 @@ import EditBlogPostFileName from "./content/blog_create_edit/edit_post_option";
 import BlogCoverPhotoUpload from "./content/blog_details/conver_photo";
 import BlogHeadingInput from "./content/blog_details/heading";
 import ReviewDocument from "./content/final_draft/main";
+import BlogContentWriting from "./content/blog_post_write/content_writing";
 
 function PostBlogsMainComp() {
     return (
@@ -53,17 +53,8 @@ function PostBlogsMainComp() {
                         <Route
                             path="/content"
                             element={
-                                <div className="pt-10 pl-10">
-                                    <div className="pb-6 flex flex-row justify-between items-center">
-                                        <p className="text-2xl text-gray-500">Write content below...</p>
-                                        <button
-                                            type="button"
-                                            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5"
-                                        >
-                                            Save
-                                        </button>
-                                    </div>
-                                    <TinymiceEditor />
+                                <div>
+                                    <BlogContentWriting/>
                                 </div>
                             }
                         />

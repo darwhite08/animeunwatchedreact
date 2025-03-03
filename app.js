@@ -4,6 +4,8 @@ import session from 'express-session';
 import bestAnimeListRouter from './backend/routes/best_anime_list/bestAnimeRoutes.js';
 import authRoutes from './backend/routes/authRoutes.js'
 import redirectRoutes from './backend/routes/redirect_routes.js';
+import blogPostHandle from './backend/blog/route/blog_post_handle.js';
+import blogGetHandle from './backend/blog/route/blog_get_handle.js';
 
 const app = express();
 const PORT = 3000;
@@ -32,6 +34,8 @@ app.use(
 app.use(authRoutes); 
 app.use(redirectRoutes)
 app.use( bestAnimeListRouter);
+app.use(blogPostHandle)
+app.use(blogGetHandle);
 
 // Start server
 app.listen(PORT, () => {

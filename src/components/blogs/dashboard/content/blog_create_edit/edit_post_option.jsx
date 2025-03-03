@@ -1,23 +1,22 @@
 import { useState } from "react";
 import { MoreVertical } from "lucide-react";
+import SuccessModal from "../../../../cards/succes_card";
+import axios from "axios";
 
-const FileListCard = () => {
+const FileListCard = ({ folderName }) => {
     const [files, setFiles] = useState([
         "document1.pdf",
         "report.docx",
         "image.png",
         "notes.txt",
-        "notes.txt",
-        "notes.txt",
-        "notes.txt",
-        "notes.txt",
-
     ]);
     const [selectedFile, setSelectedFile] = useState(null);
     const [editingFile, setEditingFile] = useState(null);
     const [newFileName, setNewFileName] = useState("");
     const [deleteFile, setDeleteFile] = useState(null);
     const [menuOpen, setMenuOpen] = useState(null);
+    const [modalOpen, setModalOpen] = useState(false);
+
 
     const handleEdit = (file) => {
         setEditingFile(file);
@@ -25,9 +24,14 @@ const FileListCard = () => {
         setMenuOpen(null);
     };
 
-    const handleEditSubmit = () => {
+    const handleEditSubmit = async () => {
         setFiles(files.map(f => (f === editingFile ? newFileName : f)));
         setEditingFile(null);
+        try {
+            const req = await axios.post('/api/blog/editpostfile', { newFileName })
+        } catch (error) {
+
+        }
     };
 
     const handleDelete = (file) => {
@@ -35,16 +39,24 @@ const FileListCard = () => {
         setMenuOpen(null);
     };
 
-    const confirmDelete = () => {
+    const confirmDelete = async() => {
         setFiles(files.filter(f => f !== deleteFile));
         setDeleteFile(null);
     };
+    const handleEditBlog = async(file) => {
+        setModalOpen(true);
+        try {
+            const req = await axios.get(`/api/blog/edit/a`,)
+        } catch (error) {
+            
+        }
+    }
 
     return (
         <div className="w-full rounded-lg py-4 ">
-            <div className=" flex flex-row justify-between w-full">
-            <h2 className="text-lg font-semibold mb-4">File List</h2>
-            <button className="block px-4 py-2 ">Delete Folder</button>
+            <div className=" flex flex-row justify-between items-center w-full mb-4">
+                <h2 className="text-lg font-semibold  inline-flex items-center gap-2">Folder: <span className="bg-gray-300 font-medium text-gray-600 text-xs rounded-lg px-3 py-0.5">{folderName}</span></h2>
+                <button className="block px-4 py-1 bg-red-200 rounded-lg text-red-800 ">Delete Folder</button>
             </div>
             <div className="border border-2 w-full p-4 rounded-lg">
                 <ul className="space-y-2 grid grid-cols-3 gap-4 items-center justify-center ">
@@ -70,7 +82,7 @@ const FileListCard = () => {
                     ))}
                 </ul>
                 {selectedFile && (
-                    <button className="mt-4 w-full bg-blue-500 text-white px-4 py-2 rounded" onClick={() => handleEdit(selectedFile)}>
+                    <button className="mt-4 w-full bg-blue-500 text-white px-4 py-2 rounded" onClick={() => handleEditBlog(selectedFile)}>
                         Edit Blog
                     </button>
                 )}
@@ -104,6 +116,14 @@ const FileListCard = () => {
                         </div>
                     </div>
                 )}
+                {modalOpen && <SuccessModal
+                    isOpen={modalOpen}
+                    onClose={() => setModalOpen(false)}
+                    sucessMessage="Are you sure to edit file"
+                    value="k"
+                    file={selectedFile}
+                    button1="Continue"
+                    button2="Dismiss" />}
             </div>
         </div>
 
