@@ -120,7 +120,7 @@ const Navbar = () => {
                                 <Link to="/action-figures" className="hover:text-blue-500">Action Figures</Link>
                             </li>
                             {/*  */}
-                            <li className="relative">
+                            {/* <li className="relative">
                                 <button
                                     onClick={() => setDropdown2Open(!dropdown2Open)}
                                     className="hover:text-blue-500 focus:outline-none"
@@ -134,7 +134,7 @@ const Navbar = () => {
                                         </li>
                                     </ul>
                                 )}
-                            </li>
+                            </li> */}
                         </ul>
 
                         {/* Login/Profile Section */}

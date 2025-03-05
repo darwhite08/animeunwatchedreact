@@ -22,8 +22,6 @@ function HeroMainPage(params) {
         <StyledWrapper>
         <div className="container">
             <HeroSectionComp />
-            <ExploreAnimeCard />
-            <Cta/>
         </div>
         </StyledWrapper>
     );

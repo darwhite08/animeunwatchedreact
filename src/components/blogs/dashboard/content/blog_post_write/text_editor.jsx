@@ -16,9 +16,9 @@ export default function TinymceEditor({ value, onChange }) {
           resize: false, // 🛑 Prevents editor resizing
           height: 400, // 📌 Set a fixed height to prevent resizing issues
           plugins:
-            "anchor preview emoticons table accordion autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount",
+            "anchor preview code emoticons table accordion autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount",
           toolbar:
-            "undo redo | styles fontsize | bold italic underline strikethrough blockquote forecolor backcolor| numlist bullist indent outdent table emoticons| align lineheight | link image media  |  charmap  removeformat  accordion  preview",
+            "undo redo |code styles fontsize | bold italic underline strikethrough blockquote forecolor backcolor| numlist bullist indent outdent table emoticons| align lineheight | link image media  |  charmap  removeformat  accordion  preview",
           setup: (editor) => {
             editorRef.current = editor;
             editor.on("input change keyup", () => {

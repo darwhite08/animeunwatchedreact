@@ -2,10 +2,12 @@ import React, { useState, useEffect } from "react";
 import TinymiceEditor from "./text_editor";
 import axios from "axios";
 import DynamicComponent from "./dynamic_comp";
+import { Fullscreen, Save } from "lucide-react";
 
 function BlogContentWriting() {
     const [blogContent, setBlogContent] = useState(""); // 🟢 Stores input
     const [jsxComponent, setJsxComponent] = useState(""); // 🟢 Stores JSX output
+    const [previewContentOpen, setPreviewContentOpen] = useState(true)
 
     // ✅ Fetch latest saved content when the component mounts
     useEffect(() => {
@@ -26,10 +28,8 @@ function BlogContentWriting() {
     // ✅ Function to Save Blog Content
     const saveBlogContent = async () => {
         if (!blogContent.trim()) {
-            alert("Blog content cannot be empty.");
             return;
         }
-
         try {
             const response = await axios.post("/api/blog/blogcontent/save", {
                 content: blogContent
@@ -37,13 +37,32 @@ function BlogContentWriting() {
 
             if (response.status === 200) {
                 setJsxComponent(response.data.data); // ✅ Store JSX safely
-                alert("Blog content saved successfully!");
             }
         } catch (error) {
             console.error("Failed to save blog content:", error);
             alert("Failed to save blog content.");
         }
     };
+    const previewBlogContent = async () => {
+        if (!blogContent.trim()) {
+            return;
+        }
+        try {
+            const response = await axios.post("/api/blog/blogcontent/save", {
+                content: blogContent
+            });
+
+            if (response.status === 200) {
+                setJsxComponent(response.data.data); // ✅ Store JSX safely
+            }
+        } catch (error) {
+            console.error("Failed to save blog content:", error);
+            alert("Failed to save blog content.");
+        }
+    };
+    const closePreviewContentTab = ()=>{
+        setPreviewContentOpen(false)
+    }
 
     return (
         <div className="pt-10 pl-10 pr-10">
@@ -55,9 +74,18 @@ function BlogContentWriting() {
                     <button
                         onClick={saveBlogContent}
                         type="button"
-                        className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5"
+                        className="inline-flex items-center gap-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5"
                     >
-                        Save
+                        <span>Save </span>
+                        <span><Save size={15} /></span>
+                    </button>
+                    <button
+                        onClick={previewBlogContent}
+                        type="button"
+                        className="inline-flex gap-2 items-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5"
+                    >
+                        <span>preview</span>
+                        <span><Fullscreen size={20} /></span>
                     </button>
                 </div>
             </div>
@@ -68,10 +96,13 @@ function BlogContentWriting() {
             </div>
 
             {/* JSX Rendered Component */}
-            {jsxComponent && (
-                <div className="mt-8 border-t pt-6">
-                    <h2 className="text-lg font-semibold text-gray-700 mt-6">Rendered JSX Component:</h2>
-                    <div className="border p-4 rounded bg-gray-100">
+            {(jsxComponent && previewContentOpen) && (
+                <div className="fixed top-0 left-0 w-full z-[60] border-t  bg-white min-h-screen">
+                    <div className="text-lg inline-flex justify-between w-full px-10 text-gray-700 mt-6">
+                        <p>Content Prview:</p>
+                        <button onClick={closePreviewContentTab} className="bg-red-200 text-red-800 px-4 rounded-lg">close</button>
+                    </div>
+                    <div className="border p-8 mx-10 mt-4 rounded-lg bg-gray-100">
                         <DynamicComponent jsxString={jsxComponent} />
                     </div>
                 </div>

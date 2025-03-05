@@ -1,7 +1,7 @@
 import * as cheerio from "cheerio";
 import * as csstree from "css-tree";
 
-// 🔥 Tailwind CSS Mappings (Extended for Colors & Backgrounds)
+// 🔥 Extended Tailwind Mapping
 const tailwindMapping = {
     "text-align": {
         "center": "text-center",
@@ -28,17 +28,23 @@ const tailwindMapping = {
         "gray": "text-gray-500"
     },
     "background-color": {
-        "#2dc26b": "bg-green-500 px-2 py-1 rounded-lg",
-        "yellow": "bg-yellow-500 px-2 py-1 rounded-lg",
-        "blue": "bg-blue-500 px-2 py-1 rounded-lg",
-        "gray": "bg-gray-500 px-2 py-1 rounded-lg"
+        "#2dc26b": "bg-green-500",
+        "yellow": "bg-yellow-500",
+        "blue": "bg-blue-500",
+        "gray": "bg-gray-500"
     },
     "font-size": {
-        "12px": "text-xs",
-        "14px": "text-sm",
-        "16px": "text-base",
-        "18px": "text-lg",
-        "20px": "text-xl"
+        "8pt": "text-xs",
+        "10pt": "text-sm",
+        "12pt": "text-md",
+        "14pt": "text-lg",
+        "24pt": "text-xl",
+        "36pt": "text-6xl",
+
+    },
+    "border": {
+        "1px solid black": "border border-black",
+        "1px solid gray": "border border-gray-300"
     }
 };
 
@@ -78,7 +84,7 @@ const convertStylesToTailwind = (styleString) => {
     return tailwindClasses.join(" ");
 };
 
-// 🔹 Convert Inline Styles to Tailwind
+// 🔹 Convert Inline Styles to Tailwind (Including Quotes, Tables & Image Detection)
 const processHtmlToTailwind = (html) => {
     const $ = cheerio.load(html, { decodeEntities: false });
 
@@ -91,6 +97,38 @@ const processHtmlToTailwind = (html) => {
             if (tailwindClass) {
                 $(element).removeAttr("style"); // Remove inline styles
                 $(element).addClass(tailwindClass); // Add Tailwind classes
+            }
+        }
+    });
+
+    // 🔥 Add Conditional Styling for Quotes
+    $("blockquote").each((index, element) => {
+        $(element).addClass("border-l-4 border-gray-500 pl-4 italic text-gray-700");
+    });
+
+    // 🔥 Add Conditional Styling for Tables
+    $("table").each((index, element) => {
+        $(element).addClass("border-collapse border border-gray-300 w-full text-left");
+    });
+
+    $("tr:nth-child(even)").each((index, element) => {
+        $(element).addClass("bg-gray-100");
+    });
+
+    $("td, th").each((index, element) => {
+        $(element).addClass("border border-gray-300 bg-white text-white px-4 py-2");
+    }); 
+
+    // 🔥 Detect <div> containing images and apply Tailwind styling
+    $("div").each((index, element) => {
+        if ($(element).find("img").length > 0) {
+            // Check if multiple images exist in div
+            const imgCount = $(element).find("img").length;
+
+            if (imgCount > 1) {
+                $(element).addClass("grid grid-cols-2 gap-4 p-4"); // Apply grid layout for multiple images
+            } else {
+                $(element).addClass("flex justify-center p-4"); // Center single image
             }
         }
     });

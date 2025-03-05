@@ -11,7 +11,7 @@ async function CleanTinymiceData(tinymceData) {
     
         allowedAttributes: {
             'a': ['href', 'title', 'target'],  // Links
-            'img': ['class', 'alt', 'width', 'height'], // Images
+            'img': ['class', 'alt', 'width', 'height','src'], // Images
             'span': ['class'],
             'div': ['class'],
             'p': ['class'],
@@ -22,7 +22,7 @@ async function CleanTinymiceData(tinymceData) {
             'h5': ['class'],
             'h6': ['class'],
             'blockquote': ['class'],
-            'table': ['border', 'cellpadding', 'cellspacing'],
+            'table': ['border', 'cellpadding', 'cellspacing','class'],
             'th': ['class'],
             'td': ['class'],
             'tr': ['class'],
@@ -30,8 +30,8 @@ async function CleanTinymiceData(tinymceData) {
             'ol': ['class'],
             'li': ['class'],
             'code': ['class'],
-            'video': ['controls', 'autoplay', 'loop', 'muted', 'poster', 'width', 'height'],
-            'source': ['src', 'type']
+            'video': ['controls', 'autoplay', 'loop', 'muted', 'poster', 'width', 'height','class'],
+            'source': ['src', 'type','class']
         },
     
        
