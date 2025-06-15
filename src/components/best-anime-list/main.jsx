@@ -1,17 +1,16 @@
 import React from "react";
 import BestAnimeListHeading  from "./heading";
 import UserBar from "../user/user-details";
-import AnimeFlyer from "./flyer";
+import BestAnimeListFeed from "./flyer";
 import BestAnimeListBody from "./bal-body/main";
 
 function BestAnimeListPage() {
     return(
         <div className="px-10" >
-           <BestAnimeListHeading/>
-           <UserBar/>
-           <AnimeFlyer/>
+            <div className="mt-24">
+           <BestAnimeListFeed/>
+            </div>
            <BestAnimeListBody/>
-
         </div>
     );
 }

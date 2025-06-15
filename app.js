@@ -10,6 +10,7 @@ import blogGetHandle from './backend/blog/route/blog_get_handle.js';
 const app = express();
 const PORT = 3000;
 
+
 // Middleware
 app.use(express.json());
 app.use(cors({
@@ -33,7 +34,7 @@ app.use(
 // Mount Additional Auth Routes
 app.use(authRoutes); 
 app.use(redirectRoutes)
-app.use( bestAnimeListRouter);
+app.use(bestAnimeListRouter);
 app.use(blogPostHandle)
 app.use(blogGetHandle);
 

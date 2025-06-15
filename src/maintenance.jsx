@@ -34,7 +34,7 @@ const MaintenancePage = (params) => {
   }, []);
 
   return (
-    <section className="py-24 max-h-screen bg-gray-100  relative flex flex-col items-center">
+    <section className=" max-h-screen bg-gray-100  relative flex flex-col items-center">
       <div className="w-full max-w-7xl px-4 md:px-5 lg:px-5 mx-auto text-center">
         {/* Logo */}
         <a href="#" className="mb-6 inline-block">

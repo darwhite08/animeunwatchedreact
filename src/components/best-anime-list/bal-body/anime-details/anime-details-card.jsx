@@ -3,17 +3,15 @@ import axios from "axios";
 
 function AnimeDetailCard() {
     const [animeType, setAnimeType] = useState('isekai'); // Default type
-    const [animeCategorys,setAnimeCategorys] = useState([])
+    const [animeCategorys, setAnimeCategorys] = useState([])
     const [animeData, setAnimeData] = useState(null); // State for anime data
     const [loading, setLoading] = useState(true); // Loading state
     const [error, setError] = useState(null); // Error state
     useEffect(() => {
         const fetchAnimeData = async () => {
             try {
-                setLoading(true); // Start loading
-                const response = await axios.get(`/bestanimelist/${animeType.toLocaleLowerCase()}`);
+                const response = await axios.get(`/api/bestanimelist/${animeType}`);
                 console.log(response.data);
-
                 // Assuming animeData is an object, access it properly
                 setAnimeData(response.data.animeList); // Assuming 'anime' is the key holding the array of anime
             } catch (error) {
@@ -32,11 +30,6 @@ function AnimeDetailCard() {
 
     return (
         <div>
-            {animeCategorys.map((animeCategory,index)=>(
-                <div>
-                    
-                </div>
-            ))}
             {animeData && animeData.length === 0 ? (
                 <p>No anime data available.</p>
             ) : (
@@ -47,7 +40,6 @@ function AnimeDetailCard() {
                             <span className="bg-blue-600 text-white py-2 px-4 rounded-lg">{index + 1}</span>
                             <h1 className="uppercase text-gray-700">{anime.anime_name}</h1>
                         </div>
-
                         {/* Trailer Link */}
                         <div className="py-4">
                             <iframe
@@ -106,7 +98,15 @@ function AnimeDetailCard() {
                             >
                                 +
                             </button>
+                               <div>
+                            <button class="rounded-full border border-slate-300 p-2.5 text-center text-sm transition-all shadow-sm hover:shadow-lg text-slate-600 hover:text-white hover:bg-slate-800 hover:border-slate-800 focus:text-white focus:bg-slate-800 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none" type="button">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
+                                    <path d="m11.645 20.91-.007-.003-.022-.012a15.247 15.247 0 0 1-.383-.218 25.18 25.18 0 0 1-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0 1 12 5.052 5.5 5.5 0 0 1 16.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 0 1-4.244 3.17 15.247 15.247 0 0 1-.383.219l-.022.012-.007.004-.003.001a.752.752 0 0 1-.704 0l-.003-.001Z" />
+                                </svg>
+                            </button>
                         </div>
+                        </div>
+                     
                     </div>
                 ))
             )}

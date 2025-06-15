@@ -14,6 +14,11 @@ export default defineConfig({
         target: 'http://localhost:3000', // Ensure this is correctly targeting your backend
         changeOrigin: true,
         secure: false,
+      },
+      '/api/bestanimelist': {
+        target: 'http://localhost:3000', // Ensure this is correctly targeting your backend
+        changeOrigin: false,
+        secure: false,
       }
     }
   }

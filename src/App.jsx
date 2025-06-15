@@ -51,7 +51,7 @@ function App() {
             }
           />
           <Route
-            path="/bestanimelist/shounen"
+            path="/bestanimelist/*"
             element={
               <MainLayout>
                 <BestAnimeListPage />
@@ -72,7 +72,7 @@ function App() {
             path="/blog/*"
             element={
                 <div className="mt-14">
-                  <BlogsSection />
+                  <MaintenancePage />
                 </div>
             }
           />

@@ -1,8 +1,9 @@
 import express from 'express';
 import bestAnimelistData from '../../../database/bal_operations/balFetch.js';
+
 const bestAnimeListRouter = express.Router();
 
-// Define routes
+// Anime data
 const animeRoute = [
   { id: 1, anime_type: 'isekai', anime_category: 'reincarnation' },
   { id: 2, anime_type: 'isekai', anime_category: 'summoning' },
@@ -50,19 +51,24 @@ const animeRoute = [
   { id: 44, anime_type: 'seinen', anime_category: 'sci-fiction' },
   { id: 45, anime_type: 'kodomomuke', anime_category: 'adventure' },
   { id: 46, anime_type: 'kodomomuke', anime_category: 'comedy' },
-  { id: 46, anime_type: 'kodomomuke', anime_category: 'educational' },
+  { id: 47, anime_type: 'kodomomuke', anime_category: 'educational' }, // corrected id
 ];
-for (let index = 0; index < animeRoute.length; index++) {
-  console.log("working")
-  bestAnimeListRouter.get(`/bestanimelist/${animeRoute[index]["anime_type"]}`, async (req, res) => {
-    const animeList = await bestAnimelistData(animeRoute[index]["anime_type"]);
-    console.log(animeList)
-    res.json({
-      animeList: animeList
-    });
-  }
 
-  );
-}
+// Get unique anime types
+const uniqueTypes = [...new Set(animeRoute.map(item => item.anime_type))];
+
+// Register dynamic routes
+uniqueTypes.forEach((type) => {
+  bestAnimeListRouter.get(`/api/bestanimelist/${type}`, async (req, res) => {
+    try {
+      const animeList = await bestAnimelistData(type);
+      console.log(animeList)
+      res.json({ animeList });
+    } catch (err) {
+      console.error(`Error fetching data for ${type}:`, err);
+      res.status(500).json({ error: `Failed to fetch anime list for ${type}` });
+    }
+  });
+});
 
 export default bestAnimeListRouter;
